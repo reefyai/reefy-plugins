@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Before adoption, obtain an explicit internal-storage decision. Send `preserve_internal_storage:true` only after preservation consent; handle a missing-choice refusal by asking instead of retrying silently.
+
 - Make the internal SSD the recommended new-device setup choice in text and voice, with an explicit exact-disk erase-or-preserve decision before adoption. Generic setup consent never authorizes erasure.
 
 - Extract shared onboarding instructions, the existing ChatGPT scaffold and package validation into the public Reefy plugins repository.
