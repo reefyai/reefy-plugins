@@ -118,3 +118,12 @@ def test_bundled_storage_guide_does_not_require_new_firmware(domain):
     assert 'fresh storage inventory' not in guide
     assert 'Unsupported firmware, uncertain inventory' not in guide
     assert 'no new firmware capability or reflash is required' in guide
+
+
+@pytest.mark.parametrize('domain',['reefy.dev','reefy.ai'])
+def test_background_completion_has_one_visible_link_and_voice_cue(domain):
+    skill=render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+    assert 'background event-task reply' in skill
+    assert 'show the authoritative returned `app_url` as one **Open app** Markdown link' in skill
+    assert 'Do not render a launcher card in that background reply' in skill
+    assert 'Never dictate or spell a URL' in skill
