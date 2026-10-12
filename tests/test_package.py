@@ -118,3 +118,18 @@ def test_bundled_storage_guide_does_not_require_new_firmware(domain):
     assert 'fresh storage inventory' not in guide
     assert 'Unsupported firmware, uncertain inventory' not in guide
     assert 'no new firmware capability or reflash is required' in guide
+
+
+def test_voice_progress_has_bounded_checks_and_spoken_milestones():
+    for domain in ('reefy.dev','reefy.ai'):
+        skill=render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+        for text in ('During an active Voice session','say that adoption is complete',
+                     'announce the already-requested app installation','Speak when that app is verified running',
+                     'at least 15 seconds','up to 90 seconds','no more than seven reads',
+                     'speak one short factual result before the next wait',
+                     'never read its URL aloud','do not promise an audible callback',
+                     'A completed adoption operation is never evidence',
+                     'perform the already-requested install_app once'):
+            assert text in skill
+        assert 'During background/text event waiting' in skill
+        assert 'Never duplicate adoption or app installation' in skill
