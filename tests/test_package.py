@@ -1,0 +1,120 @@
+"""Deployment parity and safe package connection configuration."""
+import json
+import pytest
+from package import render_package
+
+
+def test_environment_render_preserves_workflow_and_connection_identity():
+    dev,prod = render_package('reefy.dev'),render_package('reefy.ai')
+    assert dev.keys()==prod.keys()
+    skill='skills/reefy-setup/SKILL.md'
+    assert dev[skill]==prod[skill]
+    manifests=[json.loads(p['plugin.json']) for p in (dev,prod)]
+    assert manifests[0]['name']==manifests[1]['name']
+    for package,domain in ((dev,'reefy.dev'),(prod,'reefy.ai')):
+        manifest=json.loads(package['plugin.json'])
+        assert manifest['extensions']['com.openai']['onboardingSkill'][2:] in package
+        mcp=json.loads(package['mcp.json'])['mcpServers']['reefy']
+        auth=mcp['extensions']['com.openai']['auth']
+        assert mcp['url']=='https://'+domain+'/mcp'
+        assert auth['authorizationUrl']=='https://'+domain+'/oauth/mcp/authorize'
+        assert auth['tokenUrl']=='https://'+domain+'/oauth/mcp/token'
+        assert auth['client']['tokenEndpointAuthMethod']=='none'
+        assert 'clientSecret' not in auth
+        assert set(auth['baseScopes'])=={'reefy:devices:read','reefy:devices:adopt','reefy:apps:install','reefy:events:read'}
+
+
+@pytest.mark.parametrize('domain',['reefy.dev.attacker.example','http://reefy.dev','localhost',''])
+def test_unconfigured_authorities_rejected(domain):
+    with pytest.raises(ValueError):
+        render_package(domain)
+
+
+def test_update_preserves_registered_identity_assets_and_mapping(tmp_path):
+    import zipfile
+    from package import build_update
+    base,out=tmp_path/'original.zip',tmp_path/'updated.zip'
+    original={'name':'synthetic-reefy','version':'1.0.0','apps':'./.app.json',
+              'author':{'name':'Synthetic developer'},'interface':{'displayName':'Synthetic Reefy'}}
+    mapping={'apps':{'synthetic-reefy':{'id':'synthetic-app'}}}
+    with zipfile.ZipFile(base,'w') as z:
+        z.writestr('.codex-plugin/plugin.json',json.dumps(original))
+        z.writestr('.app.json',json.dumps(mapping))
+        z.writestr('assets/icon.svg','<svg/>')
+        z.writestr('skills/existing/SKILL.md','Existing workflow')
+    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'1.0.1'}
+    with zipfile.ZipFile(out) as z:
+        assert json.loads(z.read('.app.json'))==mapping
+        assert z.read('assets/icon.svg')==b'<svg/>'
+        assert z.read('skills/existing/SKILL.md')==b'Existing workflow'
+        root=json.loads(z.read('plugin.json'))
+        assert root['name']==original['name'] and root['author']==original['author']
+        assert root['extensions']['com.openai']['apps']=='./.app.json'
+        assert 'mcp.json' not in z.namelist()
+    with pytest.raises(ValueError,match='mapping'):
+        build_update(base,out,'reefy.dev','foreign-app')
+
+
+def test_update_rejects_traversal_before_writing(tmp_path):
+    import zipfile
+    from package import build_update
+    base,out=tmp_path/'unsafe.zip',tmp_path/'result.zip'
+    with zipfile.ZipFile(base,'w') as z:
+        z.writestr('../escape','unsafe')
+    with pytest.raises(ValueError,match='Unsafe'):
+        build_update(base,out,'reefy.dev','synthetic-app')
+    assert not out.exists()
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+@pytest.mark.parametrize('keep_other_server', [False, True])
+@pytest.mark.parametrize('mcp_path', ['mcp.json', '.mcp.json'])
+def test_registered_update_removes_direct_duplicate_from_existing_package(tmp_path, domain, keep_other_server, mcp_path):
+    import zipfile
+    from package import build_update
+    base, out = tmp_path / 'original.zip', tmp_path / 'updated.zip'
+    mapping = {'apps': {'synthetic-reefy': {'id': 'synthetic-app'}}}
+    manifest = {'name': 'synthetic-reefy', 'version': '1.0.3',
+                'extensions': {'com.openai': {'apps': './.app.json'}}}
+    servers = {'synthetic-reefy': {'type': 'streamable-http', 'url': 'https://' + domain + '/mcp'}}
+    other = {'type': 'streamable-http', 'url': 'https://synthetic.example/mcp'}
+    if keep_other_server:
+        servers['unrelated'] = other
+    with zipfile.ZipFile(base, 'w') as z:
+        z.writestr('plugin.json', json.dumps(manifest))
+        z.writestr('.app.json', json.dumps(mapping))
+        z.writestr(mcp_path, json.dumps({'mcpServers': servers}))
+        z.writestr('.codex-plugin/plugin.json', json.dumps({'name':'synthetic-reefy','version':'1.0.3','apps':'./.app.json','mcpServers':'./.mcp.json'}))
+    build_update(base, out, domain, 'synthetic-app')
+    with zipfile.ZipFile(out) as z:
+        assert json.loads(z.read('.app.json')) == mapping
+        assert z.read('skills/reefy-setup/SKILL.md') == render_package(domain)['skills/reefy-setup/SKILL.md']
+        if keep_other_server:
+            assert json.loads(z.read(mcp_path))['mcpServers'] == {'unrelated': other}
+        else:
+            assert 'mcp.json' not in z.namelist()
+            assert '.mcp.json' not in z.namelist()
+            assert 'mcpServers' not in json.loads(z.read('.codex-plugin/plugin.json'))
+
+
+@pytest.mark.parametrize('domain,other',[('reefy.dev','reefy.ai'),('reefy.ai','reefy.dev')])
+def test_onboarding_reference_is_bundled_for_the_connected_environment(domain,other):
+    package = render_package(domain)
+    guide = package['skills/reefy-setup/references/new-device.md'].decode()
+    assert '{{REEFY_ORIGIN}}' not in guide
+    assert f'https://{domain}/dashboard' in guide
+    assert f'https://{domain}/api/images/generate' in guide
+    assert f'https://{other}/dashboard' not in guide
+    assert f'https://{other}/api/images/generate' not in guide
+    from pathlib import Path
+    source = Path('shared/docs/device-onboarding.md').read_text()
+    assert guide == source.replace('{{REEFY_ORIGIN}}','https://'+domain)
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_bundled_storage_guide_does_not_require_new_firmware(domain):
+    package = render_package(domain)
+    guide = package['skills/reefy-setup/references/new-device.md'].decode()
+    assert 'fresh storage inventory' not in guide
+    assert 'Unsupported firmware, uncertain inventory' not in guide
+    assert 'no new firmware capability or reflash is required' in guide

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "reefy": {
+      "type": "streamable-http",
+      "url": "https://reefy.dev/mcp",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "mixed",
+            "client": {
+              "mode": "provided",
+              "clientId": "reefy-chatgpt",
+              "tokenEndpointAuthMethod": "none"
+            },
+            "authorizationUrl": "https://reefy.dev/oauth/mcp/authorize",
+            "tokenUrl": "https://reefy.dev/oauth/mcp/token",
+            "baseScopes": [
+              "reefy:devices:read",
+              "reefy:devices:adopt",
+              "reefy:apps:install",
+              "reefy:events:read"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

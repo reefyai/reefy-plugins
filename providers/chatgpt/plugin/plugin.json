@@ -1,0 +1,24 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "reefy",
+  "version": "0.1.1",
+  "description": "Connect your Reefy account to check devices, adopt with explicit internal-disk erasure confirmation or preservation, and install supported apps.",
+  "author": {
+    "name": "Reefy",
+    "url": "https://reefy.ai"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Reefy Dev",
+        "shortDescription": "Set up and manage your Reefy devices through chat",
+        "developerName": "Reefy",
+        "defaultPrompt": [
+          "Show my Reefy devices",
+          "Help me install an app on my Reefy device"
+        ]
+      },
+      "onboardingSkill": "./skills/reefy-setup/SKILL.md"
+    }
+  }
+}
