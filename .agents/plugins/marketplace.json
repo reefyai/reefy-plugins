@@ -1,0 +1,15 @@
+{
+  "name": "reefy-dev",
+  "interface": {
+    "displayName": "Reefy Dev"
+  },
+  "plugins": [
+    {
+      "name": "dev-6aca638964cc8191b8fe28a468eb26cc",
+      "source": {
+        "source": "local",
+        "path": "./plugins/reefy-dev"
+      }
+    }
+  ]
+}

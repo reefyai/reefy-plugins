@@ -23,6 +23,7 @@ def test_reproducible_zip_and_exact_bundle(tmp_path):
 def test_public_sources_do_not_name_private_repositories_or_infrastructure():
     root = Path(__file__).resolve().parents[1]
     files = list((root / 'shared').rglob('*.md')) + list((root / 'providers').rglob('*.md'))
+    files += list((root / 'plugins').rglob('*.md'))
     files += list((root / 'docs').rglob('*.md')) + [root / 'README.md', root / 'AGENTS.md']
     forbidden = ('reefy-service', 'big-bird', '/Users/', 'configs/reefy-', 'app/routes/', 'app/services/')
     for path in files:

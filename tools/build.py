@@ -8,7 +8,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from package import render_package
+from package import render_package, render_workspace_package
 
 
 def write_archive(path, files):
@@ -32,9 +32,17 @@ def build():
         write_archive(path, files)
         artifacts.append({'file': path.name, 'domain': domain,
                           'package_version': json.loads(files['plugin.json'])['version'],
+                          'artifact_kind': 'portable-scaffold',
                           'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
+    files = render_workspace_package()
+    path = destination / 'reefy-dev-workspace.zip'
+    write_archive(path, files)
+    artifacts.append({'file': path.name, 'domain': 'reefy.dev',
+                      'package_version': json.loads(files['plugin.json'])['version'],
+                      'artifact_kind': 'registered-workspace-package',
+                      'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
     receipt = {'source_sha': source, 'source_dirty': dirty,
-               'artifact_kind': 'portable-scaffold', 'artifacts': artifacts}
+               'artifact_kind': 'package-build', 'artifacts': artifacts}
     (destination / 'provenance.json').write_text(json.dumps(receipt, indent=2) + '\n')
     (destination / 'SHA256SUMS').write_text(''.join(a['sha256'] + '  ' + a['file'] + '\n' for a in artifacts))
     return receipt

@@ -31,3 +31,9 @@ Publishing this repository does not update the existing Reefy Dev installation, 
 Packages connect to the hosted Reefy MCP API. Validate package compatibility against the connected deployment before release. Authorization is enforced by Reefy independently of the skills. This repository does not expose or prescribe the hosted service implementation.
 
 See [MCP compatibility policy](docs/mcp-compatibility.md), [release practices](docs/releases.md) and [the golden journey](shared/docs/golden-user-journey.md).
+
+## GitHub workspace catalog
+
+The root `.agents/plugins/marketplace.json` references the complete registered Reefy Dev bundle in `plugins/reefy-dev/`. Shared instructions stay authoritative under `shared/`; run `python tools/sync_workspace.py` after changing them. CI rejects drift in the generated bundle. The only published connection identifiers are non-secret plugin/app references. They grant no Reefy account access.
+
+See [workspace import](docs/workspace-import.md) before importing. Workspace admin access and plugin ownership must be verified first. The catalog intentionally omits `pluginId` until that check, so it does not silently adopt a personal plugin. Do not import it as a replacement without deciding ownership and avoiding duplicate installations.

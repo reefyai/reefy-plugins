@@ -106,3 +106,26 @@ def build_update(base_zip, output_zip, domain, expected_app_id):
         for name, data in sorted(files.items()):
             archive.writestr(name, data)
     return {'name': identity['name'], 'version': updated_version}
+
+
+def render_workspace_package():
+    """Render the registered dev connection without a duplicate direct server."""
+    source = REPOSITORY / 'providers/chatgpt/registered'
+    manifest = json.loads((source / 'plugin.json').read_text())
+    mapping_bytes = (source / '.app.json').read_bytes()
+    mapping = json.loads(mapping_bytes)
+    if list(mapping['apps']) != [manifest['name']]:
+        raise ValueError('Registered identity does not match app mapping')
+    settings = manifest['extensions']['com.openai']
+    if settings.get('apps') != './.app.json' or 'mcpServers' in settings:
+        raise ValueError('Workspace package requires the registered connection only')
+    files = {name: data for name, data in render_package('reefy.dev').items()
+             if name.startswith('skills/')}
+    files['plugin.json'] = (json.dumps(manifest, indent=2) + '\n').encode()
+    files['.app.json'] = mapping_bytes
+    overlay = {key: manifest[key] for key in ('name', 'version', 'author', 'description')}
+    overlay.update({'apps': settings['apps'], 'interface': settings['interface'],
+                    'skills': './skills/', 'onboardingSkill': settings['onboardingSkill'],
+                    'extensions': {'com.openai': {'onboardingSkill': settings['onboardingSkill']}}})
+    files['.codex-plugin/plugin.json'] = (json.dumps(overlay, indent=2) + '\n').encode()
+    return files

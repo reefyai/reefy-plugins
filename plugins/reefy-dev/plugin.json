@@ -1,0 +1,24 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "dev-6aca638964cc8191b8fe28a468eb26cc",
+  "version": "1.0.11",
+  "description": "Connect your Reefy account to check devices, adopt with explicit internal-disk erasure confirmation or preservation, and install supported apps.",
+  "author": {
+    "name": "App developer"
+  },
+  "extensions": {
+    "com.openai": {
+      "apps": "./.app.json",
+      "interface": {
+        "capabilities": [],
+        "category": "Other",
+        "defaultPrompt": null,
+        "developerName": "App developer",
+        "displayName": "Reefy Dev",
+        "longDescription": "Connect your Reefy account to check devices, adopt with explicit internal-disk erasure confirmation or preservation, and install supported apps.",
+        "shortDescription": "Check devices, confirm storage setup, and start Reefy apps"
+      },
+      "onboardingSkill": "./skills/reefy-setup/SKILL.md"
+    }
+  }
+}
