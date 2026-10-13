@@ -133,3 +133,18 @@ def test_voice_progress_has_bounded_checks_and_spoken_milestones():
             assert text in skill
         assert 'During background/text event waiting' in skill
         assert 'Never duplicate adoption or app installation' in skill
+
+
+def test_friendly_names_preserve_user_choice_identity_and_retry_safety():
+    for domain in ('reefy.dev', 'reefy.ai'):
+        skill = render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+        for requirement in (
+            "honor the user's explicit name", 'Coral, Plankton, Anemone, Nautilus, Pearl or Lagoon',
+            'connected account', 'Compare names case-insensitively', 'Coral 2',
+            'Do not use device UUID fragments', 'never rename adopted devices automatically',
+            'Save the chosen name with the request ID and reuse both on retries',
+            'Do not add a naming question that blocks setup',
+            "Let me know if you'd prefer another name", 'Never repeat adoption',
+            'never claim a rename succeeded before its tool result',
+        ):
+            assert requirement in skill

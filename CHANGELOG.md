@@ -9,3 +9,10 @@
 - Add reproducible artifact generation and CI checks. Existing installed package versions and backend contracts are unchanged.
 - Document Reefy API v1 compatibility at the stable `/mcp` endpoint, separately from MCP protocol and package versions.
 - Add an importable Reefy Dev workspace catalog and registered package 1.0.11, with generated-resource drift checks. Activation requires workspace admin access and verified plugin ownership.
+
+## Friendly device naming
+
+New-device setup honors explicit names and otherwise chooses a short reef-themed
+name, avoids visible account-name collisions, preserves request identity on retries
+and explains the automatic choice. Existing devices are not renamed automatically.
+Later rename requests require an available authorized tool and an actual result.
