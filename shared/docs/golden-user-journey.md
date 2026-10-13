@@ -15,7 +15,7 @@ Dev and production use the same code, endpoint paths and contracts. The connecte
 5. Adopt once, save the operation ID and arrange temporary, scoped event continuation where supported. Re-read authoritative state after subscription to catch races. Backend acceptance is not device readiness. Stop monitoring after completion, failure or cancellation.
 6. Install the selected supported app once, track readiness through the same operation/event lifecycle and continue already-authorized configuration. Do not duplicate instances on retries or infer new permissions from events.
 7. Complete app-specific setup through secure provider authorization/pairing when required. Chaos Coordinator is the first reference app, not a required dependency for all apps. Its provider and WhatsApp steps illustrate additional app-specific handoffs.
-8. Verify an app-specific usable outcome. For a web app, resolve its authorized instance launch control and show one Open app action when ready. Route readiness and running-container status are separate. Do not create a share link merely to open the owner's app.
+8. Verify an app-specific usable outcome. For a web app, resolve its authorized instance launch control and show one Open app action when ready. Background completion replies include one explicit owner app link in the reply itself, since a host may omit task-generated UI cards. Voice gives a short cue instead of reading the URL aloud. Route readiness and running-container status are separate. Do not create a share link merely to open the owner's app.
 9. Later requests can check devices, describe cached hardware or start another supported app. Keep the web dashboard available for advanced configuration and recovery.
 
 ## Host constraints and acceptance

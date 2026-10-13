@@ -148,3 +148,25 @@ def test_friendly_names_preserve_user_choice_identity_and_retry_safety():
             'never claim a rename succeeded before its tool result',
         ):
             assert requirement in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_background_completion_has_visible_link_and_distinct_operation_card(domain):
+    skill = render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+    assert 'background event-task reply' in skill
+    assert 'show the authoritative returned `app_url` as one **Open app** Markdown link' in skill
+    assert 'Do not render a launcher card in that background reply' in skill
+    assert 'Never dictate or spell a URL' in skill
+    assert 'new app-start status card' in skill
+    assert 'never reuse the adoption card' in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_storage_choice_survives_package_updates(domain):
+    skill = render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+    guide = render_package(domain)['skills/reefy-setup/references/new-device.md'].decode()
+    for content in (skill, guide):
+        assert 'preserve_internal_storage:true' in content
+        assert 'Storage choice required' in content
+    assert 'Before any new-device adoption' in skill
+    assert 'Do not adopt before the user answers' in skill

@@ -1,5 +1,9 @@
 # Changelog
 
+## Registered package 1.0.17
+
+Restore explicit owner app links in background completion replies and mandatory storage-choice guidance. Give foreground app startup its own operation card, retaining reef names and Voice progress guidance. Add package regression coverage for both environments.
+
 ## Unreleased
 
 - Add active Voice setup milestone speech and bounded foreground status narration, retaining event monitoring and explicit storage consent. Host audio behavior requires real-client acceptance.
