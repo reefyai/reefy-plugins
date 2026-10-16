@@ -170,3 +170,26 @@ def test_storage_choice_survives_package_updates(domain):
         assert 'Storage choice required' in content
     assert 'Before any new-device adoption' in skill
     assert 'Do not adopt before the user answers' in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_firmware_workflow_keeps_reboot_and_erasure_separate(domain):
+    skill = render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+    for required in ('get_device_firmware', 'adoption_update_required',
+                     'temporarily interrupt running apps', 'confirm_reboot:true',
+                     'get_firmware_update', 'device.firmware_changed',
+                     'Firmware update IDs are not adoption operation IDs',
+                     'Existing erase-confirmation safeguards apply', 'Never say that using an SSD itself requires newer firmware',
+                     'Card Stop status checks does not cancel firmware work'):
+        assert required in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_firmware_reboot_restarts_normal_discovery_with_saved_context(domain):
+    skill=render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+    for required in ('device.registered', 'Before dispatching', 'without filtering to the old UUID',
+                     'rerun normal device discovery', 'new request ID',
+                     'chosen name, internal-storage preference, prior explicit erase approval and requested app',
+                     'do not add a disk-matching workflow', 'Do not try to keep the old UUID sticky',
+                     'unsubscribe the exact temporary firmware and registration subscriptions'):
+        assert required in skill

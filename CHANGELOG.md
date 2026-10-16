@@ -1,5 +1,9 @@
 # Changelog
 
+## Registered package 1.0.18
+
+Add guided firmware update consent, verified progress and setup continuation. Keep reboot approval separate from internal-disk erasure, preserving cards, background app links and friendly names.
+
 ## Registered package 1.0.17
 
 Restore explicit owner app links in background completion replies and mandatory storage-choice guidance. Give foreground app startup its own operation card, retaining reef names and Voice progress guidance. Add package regression coverage for both environments.
