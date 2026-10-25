@@ -17,3 +17,28 @@ References:
 - https://developers.openai.com/plugins/build/plugins
 - https://developers.openai.com/plugins/deploy/submission
 - https://developers.openai.com/plugins/deploy/app-review
+
+## Plugin versioning
+
+New plugin releases use calendar-based Semantic Versioning: `YYYY.MDD.N`,
+where the middle component is the integer value of zero-padded `MMDD`, with
+leading zeroes removed, and N is a zero-based daily sequence. Use the UTC
+publication date. For example, `2026.1025.0`, then `2026.1025.1`; January 5
+is `2027.105.0`. No leading `v` or zero-padded numeric components occur in the
+manifest. An optional Git tag can prefix the same version with `v`.
+
+OpenAI requires SemVer, so the four-part date and padded suffix used by some
+app packages cannot be copied literally. This scheme retains the calendar
+and daily-sequence convention using three SemVer numeric components.
+The package version is independent of MCP API v1 and MCP protocol versions;
+a year/date change never authorizes breaking tools.
+
+Keep portable dev/prod and registered manifest versions equal. The registered
+update helper uses the reviewed source version and rejects an unchanged or
+older target, rather than inventing a separate version from the downloaded
+ZIP. Generate all overlays and bundles from their authoritative sources.
+Old published versions remain unchanged; moving from 1.0.19 needs no account
+migration or reconnection. Updating installed packages is a separate release
+action.
+
+Requirement: https://developers.openai.com/plugins/deploy/submission-errors

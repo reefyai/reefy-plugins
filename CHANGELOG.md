@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026.1025.0
+
+Adopt UTC calendar-based Semantic Versioning across portable and registered packages. Keep existing connection identities and MCP API contracts unchanged. Update archives use the reviewed source release version.
+
 ## Registered package 1.0.19
 
 Add the shared custom-app development workflow and direct project Git helper to the existing connection. Build and publish an exact commit, then install or update the private app through normal Reefy operations. Preserve app data and keep Voice speech and written readiness as separate acceptance gates. No second connection or credentials in Git configuration.
