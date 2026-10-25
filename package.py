@@ -29,7 +29,7 @@ def render_package(domain):
         else:
             files[relative] = source.read_bytes()
     for source in (REPOSITORY / 'shared/skills').rglob('*'):
-        if source.is_file():
+        if source.is_file() and '__pycache__' not in source.parts and source.suffix not in ('.pyc', '.pyo'):
             relative = source.relative_to(REPOSITORY / 'shared').as_posix()
             files[relative] = source.read_bytes()
     guide = REPOSITORY / 'shared/docs/device-onboarding.md'
