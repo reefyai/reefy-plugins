@@ -42,7 +42,7 @@ def test_update_preserves_registered_identity_assets_and_mapping(tmp_path):
         z.writestr('.app.json',json.dumps(mapping))
         z.writestr('assets/icon.svg','<svg/>')
         z.writestr('skills/existing/SKILL.md','Existing workflow')
-    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1025.0'}
+    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1026.0'}
     with zipfile.ZipFile(out) as z:
         assert json.loads(z.read('.app.json'))==mapping
         assert z.read('assets/icon.svg')==b'<svg/>'
@@ -193,3 +193,11 @@ def test_firmware_reboot_restarts_normal_discovery_with_saved_context(domain):
                      'do not add a disk-matching workflow', 'Do not try to keep the old UUID sticky',
                      'unsubscribe the exact temporary firmware and registration subscriptions'):
         assert required in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_private_host_network_guide_preserves_authenticated_ui_and_build_isolation(domain):
+    guide=render_package(domain)['skills/reefy-develop/references/project-format.md'].decode()
+    for required in ('network_mode: "host"', 'dynamic_port: true', 'APP_PORT_8080',
+                     '127.0.0.1', 'isolated build health check', 'Bridge networking remains the default'):
+        assert required in guide

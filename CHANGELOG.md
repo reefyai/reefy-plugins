@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026.1026.0
+
+Document opt-in host networking for private app LAN discovery, allocated web ports and isolated build checks. Preserve the default bridge network, authenticated owner links, project identity and saved data. No new tools or permissions.
+
 ## 2026.1025.0
 
 Adopt UTC calendar-based Semantic Versioning across portable and registered packages. Keep existing connection identities and MCP API contracts unchanged. Update archives use the reviewed source release version.
