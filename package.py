@@ -29,7 +29,7 @@ def render_package(domain):
         else:
             files[relative] = source.read_bytes()
     for source in (REPOSITORY / 'shared/skills').rglob('*'):
-        if source.is_file():
+        if source.is_file() and '__pycache__' not in source.parts and source.suffix not in ('.pyc', '.pyo'):
             relative = source.relative_to(REPOSITORY / 'shared').as_posix()
             files[relative] = source.read_bytes()
     guide = REPOSITORY / 'shared/docs/device-onboarding.md'
@@ -64,9 +64,12 @@ def build_update(base_zip, output_zip, domain, expected_app_id):
     version = re.fullmatch(r'(\d+)\.(\d+)\.(\d+)', identity.get('version', ''))
     if not version:
         raise ValueError('Unsupported existing version format')
-    updated_version = '{}.{}.{}'.format(version[1], version[2], int(version[3]) + 1)
     rendered = render_package(domain)
     manifest = json.loads(rendered['plugin.json'])
+    # Use the reviewed source release, not an independent bump of the downloaded ZIP.
+    updated_version = manifest['version']
+    if tuple(map(int, updated_version.split('.'))) <= tuple(map(int, version.groups())):
+        raise ValueError('Package release must be newer than the installed version')
     manifest.update({key: copy.deepcopy(identity[key]) for key in ('name', 'author') if key in identity})
     manifest['version'] = updated_version
     settings = copy.deepcopy((root or {}).get('extensions', {}).get('com.openai') or
