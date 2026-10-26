@@ -22,6 +22,10 @@ Restore explicit owner app links in background completion replies and mandatory 
 
 ## Unreleased
 
+- Make the internal SSD the recommended new-device setup choice in text and voice, with an explicit exact-disk erase-or-preserve decision before adoption. Generic setup consent never authorizes erasure.
+
+- Before adoption, obtain an explicit internal-storage decision. Send `preserve_internal_storage:true` only after preservation consent; handle a missing-choice refusal by asking instead of retrying silently.
+
 - Add active Voice setup milestone speech and bounded foreground status narration, retaining event monitoring and explicit storage consent. Host audio behavior requires real-client acceptance.
 
 - Extract shared onboarding instructions, the existing ChatGPT scaffold and package validation into the public Reefy plugins repository.
@@ -36,3 +40,7 @@ New-device setup honors explicit names and otherwise chooses a short reef-themed
 name, avoids visible account-name collisions, preserves request identity on retries
 and explains the automatic choice. Existing devices are not renamed automatically.
 Later rename requests require an available authorized tool and an actual result.
+
+## Registered package 1.0.14 / scaffold 0.1.4
+
+Background app completion includes one explicit owner app link in its reply, rather than relying on a task-generated card. Voice gives a short ready cue instead of dictating a URL. Foreground launchers and existing MCP contracts and permissions are unchanged.
