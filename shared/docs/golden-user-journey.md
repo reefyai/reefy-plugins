@@ -25,3 +25,7 @@ MCP connectivity alone does not guarantee background execution. Only claim monit
 Account ownership, explicit erasure consent, scoped credentials, idempotent operations and backend checks are required throughout. Skills guide behavior; backend authorization remains authoritative. Never infer missing hardware details or readiness.
 
 This is the shared product target. Tool availability, app-specific configuration and provider distribution must be validated against the deployed implementation. No new public contracts are defined here. Real-host E2E must cover successful and failed operations, consent, environment/account isolation, duplicate events, interrupted handoffs, app launch and verified fixture cleanup.
+
+## Firmware maintenance during setup
+
+Check firmware independently from internal-storage selection. Offer a short reboot/interruption approval when an update is available, and explain accurately when the general adoption rule requires it. Use the connected account's supported update tool, retain the requested name and app, and resume after fresh device-reported version verification. An unadopted reboot starts normal rediscovery with the saved request context and a new adoption operation; do not extend subscriptions across temporary UUIDs or add disk-matching steps. No user refresh request should be needed. Existing SSD erasure confirmation still applies; firmware approval does not grant it. Keep event monitoring and the firmware progress card, with honest host/Voice delivery limitations. Uncertain update outcomes never trigger automatic retries.

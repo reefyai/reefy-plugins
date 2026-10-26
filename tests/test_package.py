@@ -120,10 +120,76 @@ def test_bundled_storage_guide_does_not_require_new_firmware(domain):
     assert 'no new firmware capability or reflash is required' in guide
 
 
-@pytest.mark.parametrize('domain',['reefy.dev','reefy.ai'])
-def test_background_completion_has_one_visible_link_and_voice_cue(domain):
-    skill=render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+def test_voice_progress_has_bounded_checks_and_spoken_milestones():
+    for domain in ('reefy.dev','reefy.ai'):
+        skill=render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+        for text in ('During an active Voice session','say that adoption is complete',
+                     'announce the already-requested app installation','Speak when that app is verified running',
+                     'at least 15 seconds','up to 90 seconds','no more than seven reads',
+                     'speak one short factual result before the next wait',
+                     'never read its URL aloud','do not promise an audible callback',
+                     'A completed adoption operation is never evidence',
+                     'perform the already-requested install_app once'):
+            assert text in skill
+        assert 'During background/text event waiting' in skill
+        assert 'Never duplicate adoption or app installation' in skill
+
+
+def test_friendly_names_preserve_user_choice_identity_and_retry_safety():
+    for domain in ('reefy.dev', 'reefy.ai'):
+        skill = render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+        for requirement in (
+            "honor the user's explicit name", 'Coral, Plankton, Anemone, Nautilus, Pearl or Lagoon',
+            'connected account', 'Compare names case-insensitively', 'Coral 2',
+            'Do not use device UUID fragments', 'never rename adopted devices automatically',
+            'Save the chosen name with the request ID and reuse both on retries',
+            'Do not add a naming question that blocks setup',
+            "Let me know if you'd prefer another name", 'Never repeat adoption',
+            'never claim a rename succeeded before its tool result',
+        ):
+            assert requirement in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_background_completion_has_visible_link_and_distinct_operation_card(domain):
+    skill = render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
     assert 'background event-task reply' in skill
     assert 'show the authoritative returned `app_url` as one **Open app** Markdown link' in skill
     assert 'Do not render a launcher card in that background reply' in skill
     assert 'Never dictate or spell a URL' in skill
+    assert 'new app-start status card' in skill
+    assert 'never reuse the adoption card' in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_storage_choice_survives_package_updates(domain):
+    skill = render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+    guide = render_package(domain)['skills/reefy-setup/references/new-device.md'].decode()
+    for content in (skill, guide):
+        assert 'preserve_internal_storage:true' in content
+        assert 'Storage choice required' in content
+    assert 'Before any new-device adoption' in skill
+    assert 'Do not adopt before the user answers' in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_firmware_workflow_keeps_reboot_and_erasure_separate(domain):
+    skill = render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+    for required in ('get_device_firmware', 'adoption_update_required',
+                     'temporarily interrupt running apps', 'confirm_reboot:true',
+                     'get_firmware_update', 'device.firmware_changed',
+                     'Firmware update IDs are not adoption operation IDs',
+                     'Existing erase-confirmation safeguards apply', 'Never say that using an SSD itself requires newer firmware',
+                     'Card Stop status checks does not cancel firmware work'):
+        assert required in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_firmware_reboot_restarts_normal_discovery_with_saved_context(domain):
+    skill=render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+    for required in ('device.registered', 'Before dispatching', 'without filtering to the old UUID',
+                     'rerun normal device discovery', 'new request ID',
+                     'chosen name, internal-storage preference, prior explicit erase approval and requested app',
+                     'do not add a disk-matching workflow', 'Do not try to keep the old UUID sticky',
+                     'unsubscribe the exact temporary firmware and registration subscriptions'):
+        assert required in skill

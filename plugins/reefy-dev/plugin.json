@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dev-6aca638964cc8191b8fe28a468eb26cc",
-  "version": "1.0.14",
+  "version": "1.0.18",
   "description": "Connect your Reefy account to check devices, adopt with explicit internal-disk erasure confirmation or preservation, and install supported apps.",
   "author": {
     "name": "App developer"
