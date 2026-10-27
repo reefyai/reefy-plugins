@@ -16,13 +16,13 @@ Dev and production use the same workflow, tool contracts and `/mcp` path. Only t
 
 ## Development
 
-Use Python 3.12 or newer. Install `pytest`, then run `python -m pytest -q`. Run `python tools/build.py` to generate the dev and production portable scaffolds in `dist/`. CI runs the same checks and retains the artifacts with the exact source revision and SHA-256 checksums. The portable scaffold keeps its existing version; this repository move does not publish a new installed plugin version.
+Use Python 3.12 or newer. Install `pytest`, then run `python -m pytest -q`. Run `python tools/build.py` to generate the dev and production portable packages in `dist/`. CI runs the same checks and retains the artifacts with the exact source revision and SHA-256 checksums. The build also writes dist/submission-preflight.json with remaining listing and review-material blockers. Building a package does not update an installed version.
 
 The package is readable by its recipients. Never commit credentials, personalized boot images, reviewer access instructions, account data, device identities or live-test transcripts. Keep credentials in the secure submission portal, outside the distributed package.
 
 ## Distribution status
 
-Portable packages are scaffolds, not approved public directory releases. They need publisher metadata, host registration, live testing and OpenAI review before public publication. Existing private registered ChatGPT packages use their downloaded `.app.json` mapping. The update helper preserves that identity and avoids adding a duplicate direct MCP connection. Supply the downloaded package privately; no real registered mapping is committed here.
+Portable packages include the reviewed listing and Reefy icon. They are release candidates, not approved public directory releases. Resolve the preflight report, validate host registration and live behavior, and complete OpenAI review before public publication. Existing private registered ChatGPT packages use their downloaded `.app.json` mapping. The update helper preserves that identity and avoids adding a duplicate direct MCP connection. Supply the downloaded package privately; no real registered mapping is committed here.
 
 Publishing this repository does not update the existing Reefy Dev installation, import a workspace marketplace or submit a public plugin. Those distribution steps have their own validation gates.
 

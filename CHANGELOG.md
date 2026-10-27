@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026.1027.0
+
+Prepare the production listing with the Reefy icon, AI-computer descriptions, text/Voice wording, starter prompts and website/privacy/contact links. Preserve MCP permissions and existing registered connection identities. Add offline submission checks. Make third-party hardware examples explicitly optional, use canonical product-page links and document the recommendation behavior for review. Terms, reviewer materials and real-host acceptance remain separate release gates.
+
 ## 2026.1026.0
 
 Document opt-in host networking for private app LAN discovery, allocated web ports and isolated build checks. Preserve the default bridge network, authenticated owner links, project identity and saved data. No new tools or permissions.

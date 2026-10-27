@@ -42,7 +42,7 @@ def test_update_preserves_registered_identity_assets_and_mapping(tmp_path):
         z.writestr('.app.json',json.dumps(mapping))
         z.writestr('assets/icon.svg','<svg/>')
         z.writestr('skills/existing/SKILL.md','Existing workflow')
-    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1026.0'}
+    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1027.0'}
     with zipfile.ZipFile(out) as z:
         assert json.loads(z.read('.app.json'))==mapping
         assert z.read('assets/icon.svg')==b'<svg/>'
@@ -201,3 +201,25 @@ def test_private_host_network_guide_preserves_authenticated_ui_and_build_isolati
     for required in ('network_mode: "host"', 'dynamic_port: true', 'APP_PORT_8080',
                      '127.0.0.1', 'isolated build health check', 'Bridge networking remains the default'):
         assert required in guide
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_hardware_suggestions_are_optional_product_references_not_checkout(domain):
+    guide = render_package(domain)['skills/reefy-setup/references/new-device.md'].decode()
+    for text in (
+        'A suitable existing device skips shopping',
+        'Do not recommend purchasing another computer unnecessarily',
+        'optional Reefy-tested examples', 'any retailer',
+        'not a required purchase or a Reefy checkout',
+        'does not sell these items or process their payments',
+        'do not purchase anything without', 'not live quotes',
+        'Do not imply OpenAI endorsement',
+    ):
+        assert text in guide
+    assert 'a.co/' not in guide
+    for product in ('B00RORBNWG', 'B0H4TCY6TH', 'B0GGB2MPVH'):
+        assert f'https://www.amazon.com/dp/{product})' in guide
+    manifest = json.loads(render_package(domain)['plugin.json'])
+    interface = manifest['extensions']['com.openai']['interface']
+    for key in ('shortDescription', 'longDescription', 'defaultPrompt'):
+        assert '$' not in str(interface[key]) and 'amazon.com' not in str(interface[key])

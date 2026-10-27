@@ -36,3 +36,14 @@ def test_shared_skill_is_used_in_both_environments():
     source = Path('shared/skills/reefy-setup/SKILL.md').read_bytes()
     for domain in ('reefy.dev', 'reefy.ai'):
         assert render_package(domain)['skills/reefy-setup/SKILL.md'] == source
+
+
+def test_reefy_icon_is_bundled_unchanged_and_meets_submission_dimensions():
+    import struct
+    source = Path('providers/chatgpt/plugin/assets/reefy.png').read_bytes()
+    assert source.startswith(b'\x89PNG\r\n\x1a\n')
+    width, height = struct.unpack('>II', source[16:24])
+    assert 48 <= width == height <= 4096
+    assert len(source) <= 5 * 1024 * 1024
+    for domain in ('reefy.dev', 'reefy.ai'):
+        assert render_package(domain)['assets/reefy.png'] == source

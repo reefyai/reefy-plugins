@@ -9,6 +9,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from package import render_package, render_workspace_package
+from tools.submission_checks import listing_issues, review_issues
 
 
 def write_archive(path, files):
@@ -26,10 +27,13 @@ def build():
     source = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     dirty = bool(subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True).strip())
     artifacts = []
+    preflight = []
     for domain, name in [('reefy.dev', 'reefy-dev'), ('reefy.ai', 'reefy')]:
         files = render_package(domain)
         path = destination / (name + '.zip')
         write_archive(path, files)
+        preflight.append({'file': path.name, 'listing_issues': listing_issues(files),
+                          'review_issues': review_issues(files)})
         artifacts.append({'file': path.name, 'domain': domain,
                           'package_version': json.loads(files['plugin.json'])['version'],
                           'artifact_kind': 'portable-scaffold',
@@ -43,6 +47,7 @@ def build():
                       'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
     receipt = {'source_sha': source, 'source_dirty': dirty,
                'artifact_kind': 'package-build', 'artifacts': artifacts}
+    (destination / 'submission-preflight.json').write_text(json.dumps({'source_sha': source, 'packages': preflight, 'note': 'Offline checks only; live acceptance, reviewer access and portal approval are separate.'}, indent=2) + '\n')
     (destination / 'provenance.json').write_text(json.dumps(receipt, indent=2) + '\n')
     (destination / 'SHA256SUMS').write_text(''.join(a['sha256'] + '  ' + a['file'] + '\n' for a in artifacts))
     return receipt
