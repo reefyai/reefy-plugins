@@ -8,19 +8,21 @@ First use known account/device context. An authentication failure is not an empt
 
 Ask one useful question when unknown: "Do you already have an Intel/AMD computer and a spare USB drive, or would you like a recommended pair?" Skip the question if the user already answered it. Do not recommend purchasing another computer unnecessarily.
 
-Suggested wording: "Reefy is designed to run on compatible Intel/AMD x86_64 PCs. Here are some Reefy-tested options we recommend." The tested status comes from the Reefy team's recommendations. Do not promise support for every device, ARM PCs, Apple Silicon computers as Reefy boot targets, or every Wi-Fi/GPU peripheral. An Apple Silicon Mac may still be used to flash the USB.
+Suggested wording: "Reefy is designed to run on compatible Intel/AMD x86_64 PCs. If you need hardware, these are optional Reefy-tested examples. You can buy compatible hardware from any retailer." The tested status comes from the Reefy team's recommendations. Do not promise support for every device, ARM PCs, Apple Silicon computers as Reefy boot targets, or every Wi-Fi/GPU peripheral. An Apple Silicon Mac may still be used to flash the USB.
 
-| Item | Recommended configuration | Approximate guide price | Product |
+| Item | Example configuration | Approximate guide price | Product page |
 | --- | --- | --- | --- |
-| Small boot USB | Verbatim Store 'n' Stay Nano, 32GB, USB 3.2 Gen 1 | $11 | [USB drive](https://a.co/d/00KchgMR) |
-| Pocket-size mini PC | GMKtec G5S, Intel Celeron N5095, 4 CPU cores, 8GB RAM, 128GB SSD | $229 | [Pocket-size PC](https://a.co/d/0dzcPdmh) |
-| Phone-size mini PC | GMKtec K13, Intel Core Ultra 7 256V, 8 CPU cores, 16GB RAM, 512GB SSD | $589 | [Phone-size PC](https://a.co/d/0906GDtH) |
+| Small boot USB | Verbatim Store 'n' Stay Nano, 32GB, USB 3.2 Gen 1 | $11 | [USB drive](https://www.amazon.com/dp/B00RORBNWG) |
+| Pocket-size mini PC | GMKtec G5S, Intel Celeron N5095, 4 CPU cores, 8GB RAM, 128GB SSD | $229 | [Pocket-size PC](https://www.amazon.com/dp/B0H4TCY6TH) |
+| Phone-size mini PC | GMKtec K13, Intel Core Ultra 7 256V, 8 CPU cores, 16GB RAM, 512GB SSD | $589 | [Phone-size PC](https://www.amazon.com/dp/B0GGB2MPVH) |
 
 Choose one computer plus the USB, not both computers. Indicative totals are about $240 for the pocket-size pair or $600 for the phone-size pair, before tax/shipping. Prices are Reefy-provided guides, not live quotes. Check the linked listing's selected configuration, seller, availability and current checkout price. Do not silently substitute a different RAM/storage variant. The smaller option suits lightweight apps and remote AI services; more RAM gives room for more apps. These examples are not promises about local-model performance.
 
 When the host supports product images, show a verified product photo beside each recommended item, with its model/configuration, indicative price and purchase link. Use the exact linked product, not a generated likeness or a different variant. If photos cannot be verified or rendered, use the concise linked recommendations without pretending images are available. Keep each computer paired with the same USB and avoid duplicate purchase links.
 
-Recommend a pair and link the items; do not purchase anything without the user's explicit purchase authorization. If the hardware has not arrived, preserve the plan and wait for the user to return when ready. Do not pretend the assistant can detect package delivery.
+Explain that these are third-party product pages, not a required purchase or a Reefy checkout. Reefy does not sell these items or process their payments. Do not insert purchase links into unrelated device/app tasks or advertise product prices in the plugin listing. Do not imply OpenAI endorsement.
+
+If the user requests a hardware recommendation, suggest one suitable pair and link the optional product pages; do not purchase anything without the user's explicit purchase authorization. If the hardware has not arrived, preserve the plan and wait for the user to return when ready. Do not pretend the assistant can detect package delivery.
 
 ## Download the correct account-bound image
 
