@@ -1,7 +1,15 @@
-# Reefy plugin scaffold
+# Reefy plugin
 
-This development package points at the canonical `https://reefy.dev/mcp`. It does not register or publish a ChatGPT connection by itself. Register the backend connection first, validate its exact callback, then use the host's package/workspace publishing flow. The public OAuth client identifier is not a secret; no credentials belong in this package.
+Manage your AI computers and apps using the deployment selected in the bundled
+mcp.json. The production package connects to reefy.ai; the development package
+connects to reefy.dev. Installing this ZIP does not publish it to the directory.
 
-The package follows the [portable Agent Plugins format](https://developers.openai.com/plugins/build/plugins). Client registration and linking must be tested against the installed host before distributing it. This is a scaffold, not a verified marketplace artifact.
+The package uses the portable Agent Plugins format. Review the listing in
+plugin.json and test the complete installed package before release. Authentication
+and account authorization are enforced by the connected Reefy service. No
+credentials belong in this package.
 
-Production packaging changes deployment identity and domain configuration only. Use the same implementation, tool schemas, paths, and consent flow; do not fork the development backend or introduce a dev endpoint.
+Preparation is automated with package tests, reproducible ZIP builds, checksums
+and a submission preflight report. Passing offline checks is separate from
+real ChatGPT acceptance, reviewer access and OpenAI approval. Keep reviewer
+credentials in the secure submission portal.

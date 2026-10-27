@@ -1,10 +1,10 @@
 # Production listing proposal
 
-Status: awaiting owner review. This document is not applied to the manifests.
+Status: listing approved and applied to the portable manifests. Terms remain pending.
 
 - Display name: Reefy
 - Short description: Manage your AI computers
-- Long description: Set up and manage your own AI computers, from mini PCs to GPU-powered computers. Install apps, check hardware and status, and build and run your own private apps through ChatGPT. Requires a Reefy account and a compatible computer running Reefy OS.
+- Long description: Set up and manage your own AI computers, from mini PCs to GPU-powered computers. Install apps, check hardware and status, and build and run your own private apps through ChatGPT. Use text or ChatGPT Voice to manage your computers and apps. Requires a Reefy account and a compatible computer running Reefy OS.
 - Category: Developer Tools
 - Developer: Reefy, subject to the selected verified publishing identity
 - Website: https://reefy.ai

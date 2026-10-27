@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "reefy",
-  "version": "2026.1026.0",
-  "description": "Connect your Reefy account to check devices, adopt with explicit internal-disk erasure confirmation or preservation, and install supported apps.",
+  "version": "2026.1027.0",
+  "description": "Set up and manage your own AI computers, from mini PCs to GPU-powered computers. Install apps, check hardware and status, and build and run your own private apps through ChatGPT. Use text or ChatGPT Voice to manage your computers and apps. Requires a Reefy account and a compatible computer running Reefy OS.",
   "author": {
     "name": "Reefy",
     "url": "https://reefy.ai"
@@ -11,12 +11,20 @@
     "com.openai": {
       "interface": {
         "displayName": "Reefy Dev",
-        "shortDescription": "Set up and manage your Reefy devices through chat",
+        "shortDescription": "Manage your AI computers",
         "developerName": "Reefy",
         "defaultPrompt": [
-          "Show my Reefy devices",
-          "Help me install an app on my Reefy device"
-        ]
+          "Set up my new Reefy computer",
+          "Start an app on my Reefy computer",
+          "Build and run a simple web app on my Reefy computer"
+        ],
+        "longDescription": "Set up and manage your own AI computers, from mini PCs to GPU-powered computers. Install apps, check hardware and status, and build and run your own private apps through ChatGPT. Use text or ChatGPT Voice to manage your computers and apps. Requires a Reefy account and a compatible computer running Reefy OS.",
+        "category": "Developer Tools",
+        "websiteURL": "https://reefy.ai",
+        "supportURL": "https://reefy.ai/about",
+        "privacyPolicyURL": "https://reefy.ai/privacy",
+        "logo": "./assets/reefy.png",
+        "composerIcon": "./assets/reefy.png"
       },
       "onboardingSkill": "./skills/reefy-setup/SKILL.md"
     }

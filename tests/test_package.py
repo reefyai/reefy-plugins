@@ -42,7 +42,7 @@ def test_update_preserves_registered_identity_assets_and_mapping(tmp_path):
         z.writestr('.app.json',json.dumps(mapping))
         z.writestr('assets/icon.svg','<svg/>')
         z.writestr('skills/existing/SKILL.md','Existing workflow')
-    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1026.0'}
+    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1027.0'}
     with zipfile.ZipFile(out) as z:
         assert json.loads(z.read('.app.json'))==mapping
         assert z.read('assets/icon.svg')==b'<svg/>'
