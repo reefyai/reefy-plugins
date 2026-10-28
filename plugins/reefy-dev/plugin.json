@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dev-6aca638964cc8191b8fe28a468eb26cc",
   "version": "2026.1027.0",
-  "description": "Connect your Reefy account to check devices, adopt with explicit internal-disk erasure confirmation or preservation, and install supported apps.",
+  "description": "Set up and manage your own AI computers, from mini PCs to GPU-powered computers. Install apps, check hardware and status, and build and run your own private apps through ChatGPT. Use text or ChatGPT Voice to manage your computers and apps. Requires a Reefy account and a compatible computer running Reefy OS.",
   "author": {
     "name": "App developer"
   },
@@ -11,12 +11,21 @@
       "apps": "./.app.json",
       "interface": {
         "capabilities": [],
-        "category": "Other",
-        "defaultPrompt": null,
-        "developerName": "App developer",
+        "category": "Developer Tools",
+        "defaultPrompt": [
+          "Set up my new Reefy computer",
+          "Start an app on my Reefy computer",
+          "Build and run a simple web app on my Reefy computer"
+        ],
+        "developerName": "Reefy",
         "displayName": "Reefy Dev",
-        "longDescription": "Connect your Reefy account to check devices, adopt with explicit internal-disk erasure confirmation or preservation, and install supported apps.",
-        "shortDescription": "Check devices, confirm storage setup, and start Reefy apps"
+        "longDescription": "Set up and manage your own AI computers, from mini PCs to GPU-powered computers. Install apps, check hardware and status, and build and run your own private apps through ChatGPT. Use text or ChatGPT Voice to manage your computers and apps. Requires a Reefy account and a compatible computer running Reefy OS.",
+        "shortDescription": "Manage your AI computers",
+        "websiteURL": "https://reefy.ai",
+        "supportURL": "https://reefy.ai/about",
+        "privacyPolicyURL": "https://reefy.ai/privacy",
+        "logo": "./assets/reefy.png",
+        "composerIcon": "./assets/reefy.png"
       },
       "onboardingSkill": "./skills/reefy-setup/SKILL.md"
     }

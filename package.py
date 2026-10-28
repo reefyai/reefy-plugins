@@ -74,7 +74,7 @@ def build_update(base_zip, output_zip, domain, expected_app_id):
     manifest['version'] = updated_version
     settings = copy.deepcopy((root or {}).get('extensions', {}).get('com.openai') or
         {k: v for k, v in (overlay or {}).items() if k not in ('name', 'version', 'author', 'description')})
-    settings.setdefault('interface', {})['shortDescription'] = 'Check devices, confirm storage setup, and start Reefy apps'
+    settings.setdefault('interface', {}).update(copy.deepcopy(manifest['extensions']['com.openai']['interface']))
     settings['apps'] = './.app.json'
     settings['onboardingSkill'] = './skills/reefy-setup/SKILL.md'
     manifest['extensions']['com.openai'] = settings
@@ -97,6 +97,7 @@ def build_update(base_zip, output_zip, domain, expected_app_id):
     if overlay:
         if overlay.get('mcpServers') == './.mcp.json' and '.mcp.json' not in files:
             overlay.pop('mcpServers')
+        overlay['interface'] = copy.deepcopy(settings['interface'])
         overlay['description'] = manifest['description']
         overlay['version'] = updated_version
         overlay['skills'] = './skills/'
@@ -123,7 +124,7 @@ def render_workspace_package():
     if settings.get('apps') != './.app.json' or 'mcpServers' in settings:
         raise ValueError('Workspace package requires the registered connection only')
     files = {name: data for name, data in render_package('reefy.dev').items()
-             if name.startswith('skills/')}
+             if name.startswith(('skills/', 'assets/'))}
     files['plugin.json'] = (json.dumps(manifest, indent=2) + '\n').encode()
     files['.app.json'] = mapping_bytes
     overlay = {key: manifest[key] for key in ('name', 'version', 'author', 'description')}

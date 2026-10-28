@@ -223,3 +223,23 @@ def test_hardware_suggestions_are_optional_product_references_not_checkout(domai
     interface = manifest['extensions']['com.openai']['interface']
     for key in ('shortDescription', 'longDescription', 'defaultPrompt'):
         assert '$' not in str(interface[key]) and 'amazon.com' not in str(interface[key])
+
+
+def test_registered_update_applies_approved_listing_without_replacing_connection(tmp_path):
+    import zipfile
+    from package import build_update
+    base, out = tmp_path / 'original.zip', tmp_path / 'updated.zip'
+    mapping = {'apps': {'synthetic-reefy': {'id': 'synthetic-app'}}}
+    original = {'name': 'synthetic-reefy', 'version': '1.0.0', 'author': {'name': 'Synthetic developer'}, 'extensions': {'com.openai': {'apps': './.app.json', 'interface': {'displayName': 'Old name', 'shortDescription': 'Old subtitle'}}}}
+    with zipfile.ZipFile(base, 'w') as z:
+        z.writestr('plugin.json', json.dumps(original))
+        z.writestr('.app.json', json.dumps(mapping))
+    build_update(base, out, 'reefy.dev', 'synthetic-app')
+    expected = json.loads(render_package('reefy.dev')['plugin.json'])['extensions']['com.openai']['interface']
+    with zipfile.ZipFile(out) as z:
+        updated = json.loads(z.read('plugin.json'))
+        assert updated['extensions']['com.openai']['interface'] == expected
+        assert updated['name'] == original['name'] and updated['author'] == original['author']
+        assert json.loads(z.read('.app.json')) == mapping
+        assert z.read(expected['logo'][2:]) == render_package('reefy.dev')[expected['logo'][2:]]
+        assert 'mcp.json' not in z.namelist()
