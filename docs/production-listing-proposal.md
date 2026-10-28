@@ -1,6 +1,6 @@
 # Production listing proposal
 
-Status: listing approved and applied to the portable manifests. Terms remain pending.
+Status: listing approved and applied to the portable manifests. Terms approved; live URL publication is tracked separately.
 
 - Display name: Reefy
 - Short description: Manage your AI computers
@@ -10,7 +10,7 @@ Status: listing approved and applied to the portable manifests. Terms remain pen
 - Website: https://reefy.ai
 - Support: https://reefy.ai/about
 - Privacy: https://reefy.ai/privacy
-- Terms: pending review and publication of a working Terms page
+- Terms: https://reefy.ai/terms
 - Primary and composer icon: the existing Reefy mark, bundled as assets/reefy.png
 
 Starter prompts:

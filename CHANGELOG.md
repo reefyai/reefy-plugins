@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026.1028.0
+
+Add the approved hosted-service Terms URL to portable and registered listing metadata. Keep MCP scopes and connection identities unchanged. Reviewer materials, live acceptance and portal approval remain separate publication gates.
+
 ## 2026.1027.0
 
 Prepare the production listing with the Reefy icon, AI-computer descriptions, text/Voice wording, starter prompts and website/privacy/contact links. Preserve MCP permissions and existing registered connection identities. Add offline submission checks. Make third-party hardware examples explicitly optional, use canonical product-page links and document the recommendation behavior for review. Terms, reviewer materials and real-host acceptance remain separate release gates.

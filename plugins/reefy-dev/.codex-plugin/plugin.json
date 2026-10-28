@@ -1,6 +1,6 @@
 {
   "name": "dev-6aca638964cc8191b8fe28a468eb26cc",
-  "version": "2026.1027.0",
+  "version": "2026.1028.0",
   "author": {
     "name": "App developer"
   },
@@ -22,7 +22,8 @@
     "supportURL": "https://reefy.ai/about",
     "privacyPolicyURL": "https://reefy.ai/privacy",
     "logo": "./assets/reefy.png",
-    "composerIcon": "./assets/reefy.png"
+    "composerIcon": "./assets/reefy.png",
+    "termsOfServiceURL": "https://reefy.ai/terms"
   },
   "skills": "./skills/",
   "onboardingSkill": "./skills/reefy-setup/SKILL.md",

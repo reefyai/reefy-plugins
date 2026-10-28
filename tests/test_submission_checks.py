@@ -50,14 +50,15 @@ def test_registered_connections_and_lifecycle_hooks_are_not_submission_packages(
     assert any('Public submission' in issue for issue in listing_issues(candidate))
 
 
-def test_approved_production_listing_keeps_only_missing_terms_as_listing_blocker():
+def test_approved_production_listing_and_terms_have_no_offline_listing_blockers():
     files = render_package('reefy.ai')
     interface = json.loads(files['plugin.json'])['extensions']['com.openai']['interface']
     assert interface['displayName'] == 'Reefy'
     assert interface['shortDescription'] == 'Manage your AI computers'
     assert 'Use text or ChatGPT Voice' in interface['longDescription']
     assert 'GPU-powered computers' in interface['longDescription']
-    assert listing_issues(files) == ['termsOfServiceURL: required HTTPS URL without credentials']
+    assert interface['termsOfServiceURL'] == 'https://reefy.ai/terms'
+    assert listing_issues(files) == []
 
 
 def test_review_materials_are_not_silently_claimed_complete(candidate):
