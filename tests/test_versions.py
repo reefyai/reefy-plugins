@@ -10,7 +10,7 @@ def test_date_release_is_canonical_in_all_package_forms():
     for files in (render_package('reefy.dev'),render_package('reefy.ai'),render_workspace_package()):
         version=json.loads(files['plugin.json'])['version']
         assert re.fullmatch(r'[1-9][0-9]{3}\.[1-9][0-9]{2,3}\.(0|[1-9][0-9]*)',version)
-        assert version=='2026.1027.0'
+        assert version=='2026.1028.0'
         versions.append(version)
     assert len(set(versions))==1
 
@@ -28,7 +28,7 @@ def test_downloaded_legacy_version_uses_canonical_release(tmp_path):
 
 def test_update_rejects_same_or_older_source_release(tmp_path):
     import pytest
-    for installed in ('2026.1027.0','2026.1027.1','2027.105.0'):
+    for installed in ('2026.1028.0','2026.1028.1','2027.105.0'):
         original=tmp_path/'installed.zip';out=tmp_path/'result.zip'
         with zipfile.ZipFile(original,'w') as z:
             z.writestr('plugin.json',json.dumps({'name':'synthetic','version':installed}))
