@@ -110,3 +110,12 @@ def test_diagnostics_guidance_is_shared_bounded_and_not_an_instruction_channel()
             assert instruction in skill
         skills.append(skill)
     assert skills[0]==skills[1]==skills[2]
+
+
+def test_appmother_recovery_and_update_guidance_is_bundled():
+    from package import render_package, render_workspace_package
+    for files in (render_package('reefy.dev'),render_package('reefy.ai'),render_workspace_package()):
+        skill=files['skills/reefy-develop/SKILL.md'].decode()
+        for phrase in ('update_app','AppMother','list_devices','get_app_catalog',
+                       'same instance','before promising','firmware','browser'):
+            assert phrase in skill,phrase
