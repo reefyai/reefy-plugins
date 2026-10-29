@@ -42,7 +42,7 @@ def test_update_preserves_registered_identity_assets_and_mapping(tmp_path):
         z.writestr('.app.json',json.dumps(mapping))
         z.writestr('assets/icon.svg','<svg/>')
         z.writestr('skills/existing/SKILL.md','Existing workflow')
-    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1029.1'}
+    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1029.2'}
     with zipfile.ZipFile(out) as z:
         assert json.loads(z.read('.app.json'))==mapping
         assert z.read('assets/icon.svg')==b'<svg/>'
@@ -243,3 +243,18 @@ def test_registered_update_applies_approved_listing_without_replacing_connection
         assert json.loads(z.read('.app.json')) == mapping
         assert z.read(expected['logo'][2:]) == render_package('reefy.dev')[expected['logo'][2:]]
         assert 'mcp.json' not in z.namelist()
+
+
+@pytest.mark.parametrize('domain',['reefy.dev','reefy.ai'])
+def test_catalog_recommendations_refresh_and_identify_the_starter_app(domain):
+    skill=render_package(domain)['skills/reefy-setup/SKILL.md'].decode()
+    description=skill.split('---',2)[1]
+    assert 'discover or recommend catalog apps' in description
+    assert 'call `get_app_catalog` again in the current turn' in skill
+    assert 'Do not reuse an earlier shortlist' in skill
+    assert 'include **Guppy** as a simple starter option' in skill
+    assert 'unless the user excludes demos' in skill
+    assert 'Never invent Guppy when absent' in skill
+    assert 'instance name (catalog app name)' in skill
+    assert 'Match using the returned app slug' in skill
+    assert 'current catalog could not be checked' in skill
