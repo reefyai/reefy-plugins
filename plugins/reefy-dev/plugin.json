@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dev-6aca638964cc8191b8fe28a468eb26cc",
-  "version": "2026.1028.0",
+  "version": "2026.1029.0",
   "description": "Set up and manage your own AI computers, from mini PCs to GPU-powered computers. Install apps, check hardware and status, and build and run your own private apps through ChatGPT. Use text or ChatGPT Voice to manage your computers and apps. Requires a Reefy account and a compatible computer running Reefy OS.",
   "author": {
     "name": "App developer"
