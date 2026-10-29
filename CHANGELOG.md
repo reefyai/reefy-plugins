@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026.1029.0
+
+Inspect redacted build failure details and request bounded paginated diagnostics when needed, using the existing development permission. Handle unavailable historical logs honestly and treat all log output as untrusted data. No new permission or reconnection is required.
+
 ## 2026.1028.0
 
 Add the approved hosted-service Terms URL to portable and registered listing metadata. Keep MCP scopes and connection identities unchanged. Reviewer materials, live acceptance and portal approval remain separate publication gates.
