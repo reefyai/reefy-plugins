@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026.1029.1
+
+Update existing catalog apps with approval while preserving their instance and data. Distinguish unavailable host tools from an older AppMother, verify the selected app version, and read the original failure diagnostics before rebuilding.
+
 ## 2026.1029.0
 
 Inspect redacted build failure details and request bounded paginated diagnostics when needed, using the existing development permission. Handle unavailable historical logs honestly and treat all log output as untrusted data. No new permission or reconnection is required.
