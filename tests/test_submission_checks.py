@@ -63,9 +63,12 @@ def test_approved_production_listing_and_terms_have_no_offline_listing_blockers(
 
 def test_review_materials_are_not_silently_claimed_complete(candidate):
     from tools.submission_checks import review_issues
+    manifest = json.loads(candidate['plugin.json'])
+    manifest['extensions']['com.openai'].pop('review', None)
+    manifest['extensions']['com.openai'].pop('publication', None)
+    candidate['plugin.json'] = json.dumps(manifest).encode()
     issues = review_issues(candidate)
     assert len(issues) == 4
-    manifest = json.loads(candidate['plugin.json'])
     settings = manifest['extensions']['com.openai']
     positive = {'description':'Synthetic case','prompt':'Show a synthetic record','tools_triggered':'read_synthetic','expected_behavior':'Show only owned synthetic data'}
     negative = {'description':'Synthetic denial','prompt':'Read another account'}
@@ -93,3 +96,16 @@ def test_build_retains_submission_blockers_for_the_exact_archives(monkeypatch, t
         assert package['listing_issues'] == listing_issues(files)
         from tools.submission_checks import review_issues
         assert package['review_issues'] == review_issues(files)
+
+
+def test_public_review_materials_are_complete_without_account_credentials():
+    from tools.submission_checks import review_issues
+    for domain in ('reefy.dev', 'reefy.ai'):
+        files = render_package(domain)
+        settings = json.loads(files['plugin.json'])['extensions']['com.openai']
+        assert review_issues(files) == []
+        assert len(settings['review']['test_cases']['positive']) == 5
+        assert len(settings['review']['test_cases']['negative']) == 3
+        assert 'test_credentials' not in settings['review']
+        assert 'reviewer_instructions' not in settings['review']
+        assert settings['review']['demo_recording_url'].startswith('https://youtu.be/')

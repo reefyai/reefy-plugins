@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026.1029.3
+
+Include five positive and three negative public-review cases, the demonstration video and initial-release notes. Keep reviewer credentials outside every package. Tools, permissions and existing connections are unchanged.
+
 ## 2026.1029.2
 
 Refresh the catalog for app availability questions, include the catalog's Guppy demo in appropriate starter suggestions, and distinguish installed instance names from app names. Preserve existing tools, permissions and registered connections.

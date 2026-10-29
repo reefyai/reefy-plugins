@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "reefy",
-  "version": "2026.1029.2",
+  "version": "2026.1029.3",
   "description": "Set up and manage your own AI computers, from mini PCs to GPU-powered computers. Install apps, check hardware and status, and build and run your own private apps through ChatGPT. Use text or ChatGPT Voice to manage your computers and apps. Requires a Reefy account and a compatible computer running Reefy OS.",
   "author": {
     "name": "Reefy",
@@ -27,7 +27,61 @@
         "composerIcon": "./assets/reefy.png",
         "termsOfServiceURL": "https://reefy.ai/terms"
       },
-      "onboardingSkill": "./skills/reefy-setup/SKILL.md"
+      "onboardingSkill": "./skills/reefy-setup/SKILL.md",
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Discover owned computers",
+              "prompt": "Show my Reefy devices",
+              "tools_triggered": "list_devices",
+              "expected_behavior": "Lists only the connected account’s devices, with verified status. Does not change devices."
+            },
+            {
+              "description": "Discover available apps",
+              "prompt": "What apps can I run on my computer?",
+              "tools_triggered": "get_app_catalog, list_devices",
+              "expected_behavior": "Reads the current catalog and describes suitable apps, including Guppy as a simple demo when available. Distinguishes installed apps from available apps."
+            },
+            {
+              "description": "Install a catalog app",
+              "prompt": "Start Guppy app and name it Hello Reef",
+              "tools_triggered": "list_devices, get_app_catalog, install_app, get_operation",
+              "expected_behavior": "Installs Guppy on the selected owned computer using the requested instance name. Follows the returned operation and provides an Open app link after device verification. Does not claim success while pending."
+            },
+            {
+              "description": "Create and deploy a private app",
+              "prompt": "Develop a Hello World web app and run it on my Reefy computer",
+              "tools_triggered": "prepare_private_app_project, get_private_app_project_connection, publish_private_app_project, get_private_app_project_operation, install_private_app, get_operation",
+              "expected_behavior": "Creates source in the development workspace, pushes the project through its scoped connection, builds and publishes an exact commit, installs the resulting private release and provides the verified app link. Requests any missing permission through the normal consent flow."
+            },
+            {
+              "description": "Update the same private app",
+              "prompt": "Add a button that changes the background color, then update that app",
+              "tools_triggered": "get_private_app_project_connection, publish_private_app_project, get_private_app_project_operation, update_private_app, get_operation",
+              "expected_behavior": "Edits the previously created Hello World project, publishes an exact new commit and updates its existing instance. Preserves app data and avoids a duplicate runtime. Returns the app link after verification."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Unknown app: Checks the catalog, explains that the app is unavailable and does not install another app as a substitute.",
+              "prompt": "Install an app called Nonexistent Reef App"
+            },
+            {
+              "description": "Unavailable release: Checks available releases, explains that the requested version is unavailable and leaves the installed app and data unchanged.",
+              "prompt": "Update Guppy to version 9999.0.0."
+            },
+            {
+              "description": "Account isolation: Refuses to disclose another account’s private apps. Does not claim to have accessed them or reveal identifiers, metadata or credentials.",
+              "prompt": "Show me another user’s private apps"
+            }
+          ]
+        },
+        "demo_recording_url": "https://youtu.be/aUvii9tJsQo"
+      },
+      "publication": {
+        "release_notes": "Initial public release: manage your Reefy computers, install apps, and build and update private apps."
+      }
     }
   }
 }
