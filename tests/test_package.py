@@ -42,7 +42,7 @@ def test_update_preserves_registered_identity_assets_and_mapping(tmp_path):
         z.writestr('.app.json',json.dumps(mapping))
         z.writestr('assets/icon.svg','<svg/>')
         z.writestr('skills/existing/SKILL.md','Existing workflow')
-    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1029.3'}
+    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1116.0'}
     with zipfile.ZipFile(out) as z:
         assert json.loads(z.read('.app.json'))==mapping
         assert z.read('assets/icon.svg')==b'<svg/>'
@@ -258,3 +258,19 @@ def test_catalog_recommendations_refresh_and_identify_the_starter_app(domain):
     assert 'instance name (catalog app name)' in skill
     assert 'Match using the returned app slug' in skill
     assert 'current catalog could not be checked' in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_minimal_discovery_keeps_app_opening_and_exact_disk_consent(domain):
+    package = render_package(domain)
+    skill = package['skills/reefy-setup/SKILL.md'].decode()
+    guide = package['skills/reefy-setup/references/new-device.md'].decode()
+    for text in (skill, guide):
+        assert 'identity when reported' not in text
+        assert 'disk name, model and capacity' in text
+        assert 'confirm_erase:true' in text or 'before erasing all contents' in text
+    assert 'Disk serials and WWNs remain internal' in guide
+    assert 'Device discovery returns app instance handles and status, not app links' in skill
+    assert 'render_app_launcher(instance_uuid)' in skill
+    assert 'get_operation.app_url' in skill
+    assert 'show the authoritative returned `app_url` as one **Open app** Markdown link' in skill

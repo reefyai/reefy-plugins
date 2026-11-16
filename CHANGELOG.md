@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Match minimized tool responses: confirm internal storage using disk name, model and capacity; keep physical disk identifiers internal. Open existing apps through the launcher and retain verified completion links. Package installation and release remain separate steps.
+
 ## 2026.1029.3
 
 Include five positive and three negative public-review cases, the demonstration video and initial-release notes. Keep reviewer credentials outside every package. Tools, permissions and existing connections are unchanged.
