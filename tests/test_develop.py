@@ -123,3 +123,21 @@ def test_appmother_recovery_and_update_guidance_is_bundled():
         for phrase in ('update_app','AppMother','list_devices','get_app_catalog',
                        'same instance','before promising','firmware','browser'):
             assert phrase in skill,phrase
+
+
+def test_registered_update_removes_old_credential_helper_but_preserves_other_skills(tmp_path):
+    import zipfile
+    from package import build_update
+    original=tmp_path/'installed.zip';updated=tmp_path/'updated.zip'
+    mapping={'apps':{'synthetic-reefy':{'id':'synthetic-registered-app'}}}
+    with zipfile.ZipFile(original,'w') as archive:
+        archive.writestr('plugin.json',json.dumps({'name':'synthetic-reefy','version':'2026.1029.3'}))
+        archive.writestr('.app.json',json.dumps(mapping))
+        archive.writestr('skills/reefy-develop/scripts/push_project.py','obsolete synthetic credential helper')
+        archive.writestr('skills/unrelated/SKILL.md','Unrelated synthetic workflow')
+    build_update(original,updated,'reefy.dev','synthetic-registered-app')
+    with zipfile.ZipFile(updated) as archive:
+        assert 'skills/reefy-develop/scripts/push_project.py' not in archive.namelist()
+        assert archive.read('skills/unrelated/SKILL.md')==b'Unrelated synthetic workflow'
+        assert json.loads(archive.read('.app.json'))==mapping
+        assert b'apply_private_app_project_changes' in archive.read('skills/reefy-develop/SKILL.md')
