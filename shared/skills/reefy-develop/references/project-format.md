@@ -1,6 +1,6 @@
 # Pilot project format
 
-Use a root Dockerfile and reefy/app.json. The app must serve HTTP on the declared port, run as uid 65534, and store all persistent state under /data. The builder smoke test checks the root HTTP endpoint. Use dependencies appropriate to the user's app and build/test locally before publication.
+Use a root Dockerfile and reefy/app.json. The app must serve HTTP on the declared port, run as uid 65534, and store all persistent state under /data. The builder smoke test checks the root HTTP endpoint. Use dependencies appropriate to the user's app. Publication runs the build and startup checks on the computer; inspect its diagnostics before claiming success.
 
 Minimal supported manifest:
 

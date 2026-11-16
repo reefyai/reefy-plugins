@@ -8,7 +8,7 @@ import time
 import pytest
 from package import render_package, render_workspace_package
 
-SOURCE = Path('shared/skills/reefy-develop/scripts/push_project.py')
+SOURCE = Path('tools/legacy/push_project.py')
 spec = importlib.util.spec_from_file_location('project_push', SOURCE)
 helper = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helper)
@@ -87,15 +87,19 @@ def test_push_auth_is_ephemeral_and_failure_cannot_expose_token(tmp_path, monkey
     assert TOKEN not in str(error.value)
 
 
-def test_registered_and_portable_packages_include_identical_development_helper():
+def test_packages_use_source_relay_without_credential_helper():
     key = 'skills/reefy-develop/scripts/push_project.py'
     for package in (render_package('reefy.dev'), render_package('reefy.ai'), render_workspace_package()):
-        assert package[key] == SOURCE.read_bytes()
+        assert key not in package
         skill = package['skills/reefy-develop/SKILL.md'].decode()
-        for name in ('prepare_private_app_project','get_private_app_project_connection',
+        for name in ('prepare_private_app_project','list_private_app_projects','list_private_app_project_files',
+                     'read_private_app_project_file','apply_private_app_project_changes',
                      'publish_private_app_project','get_private_app_project_operation',
                      'install_private_app','update_private_app'):
             assert name in skill
+        assert 'get_private_app_project_connection' not in skill
+        assert 'push_project.py' not in skill
+        assert 'fresh chat' in skill
         assert 'never dictate its URL' in skill
         assert 'Do not ask users to install another plugin' in skill
 

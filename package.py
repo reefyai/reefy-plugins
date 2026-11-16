@@ -105,6 +105,7 @@ def build_update(base_zip, output_zip, domain, expected_app_id):
         files['.codex-plugin/plugin.json'] = (json.dumps(overlay, indent=2) + '\n').encode()
     # Keep assets and the exact registered app mapping. Replace only package
     # configuration and our approved setup skill, not unrelated workflows.
+    files.pop('skills/reefy-develop/scripts/push_project.py',None)
     files.update({k: v for k, v in rendered.items() if k != 'README.md'})
     with zipfile.ZipFile(output_zip, 'w', zipfile.ZIP_DEFLATED) as archive:
         for name, data in sorted(files.items()):
