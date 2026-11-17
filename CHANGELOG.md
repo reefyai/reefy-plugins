@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026.1117.0
+
+Guide Ethernet, local Reefy-Setup Wi-Fi and dashboard WiFi configuration from the shared onboarding source. Keep passwords on the local setup page or dashboard, outside chat. Preserve plugin identities, account connections and permissions; no firmware change is required.
+
 ## Unreleased
 
 Match minimized tool responses: confirm internal storage using disk name, model and capacity; keep physical disk identifiers internal. Open existing apps through the launcher and retain verified completion links. Package installation and release remain separate steps.
