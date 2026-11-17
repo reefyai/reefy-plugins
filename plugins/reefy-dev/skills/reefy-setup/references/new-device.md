@@ -51,6 +51,23 @@ Walk through:
 
 Pre-formatting or an erase helper is not required. On a validation/write error, do not claim flashing succeeded or continue to boot. Help check the image, USB connection and Etcher error; retry only the explicitly selected USB. Never suggest wiping the internal disk as a generic recovery step. If the assistant is actually operating the flasher, obtain the required exact-target destructive-action approval before writing; instructions alone do not authorize another disk.
 
+## Connect to the internet
+
+Ethernet is optional. If available, connect a cable from the computer to the router for the simplest first boot. For Wi-Fi, the computer needs a supported adapter that can create the setup network.
+
+When booting without working Ethernet or saved Wi-Fi:
+
+1. On a nearby phone or laptop, join **Reefy-Setup-XXXX**. This local setup network does not require a password. If it does not appear immediately, allow boot to finish. An adopted computer may first try its saved Wi-Fi for up to 60 seconds.
+2. Open the setup page that appears. If it does not open, visit **http://192.168.73.1** while still joined to Reefy-Setup. The setup network itself has no internet access.
+3. Select the home Wi-Fi network, or enter its name manually if hidden. Enter the password on the local setup page, never in chat, then choose **Connect**. WPA/WPA2-Personal is supported; do not promise enterprise authentication or open upstream networks.
+4. The setup network disconnects while Reefy joins the home network. Rejoin the home network on the phone/laptop, then return to [the same Reefy dashboard](https://reefy.dev/dashboard) or chat. Read device discovery again before claiming it is online. This network setup does not adopt the device or erase storage; continue the existing adoption and exact-disk consent steps separately.
+
+If the Wi-Fi attempt fails, the setup network returns so the user can retry the local page. If no setup network appears, check for ready Ethernet and adapter support; use Ethernet temporarily when available. Do not suggest reflashing, factory reset or disk erasure just to configure networking. A runtime internet outage does not itself open the setup network, and a cloud outage does not mean the saved Wi-Fi was lost. Do not reboot or interrupt running apps automatically.
+
+For an already-online computer, the dashboard provides **Settings > WiFi**, **Scan Networks**, network selection and **Connect**, with a manual-entry option. Enter passwords there, not in chat. Do not promise this dashboard path can reach an offline computer.
+
+In Voice, start concisely: "Use Ethernet, or join Reefy-Setup from your phone and select your home Wi-Fi on the setup page. Enter the Wi-Fi password there, not here." Give the local address only when the page does not open or the user asks; avoid reading a long manual aloud.
+
 ## Boot and continue in chat
 
 Plug the USB into the target Intel/AMD computer and leave it connected as Reefy's boot media. Connect power and Ethernet when available for the simplest first boot. Temporarily connect a display/keyboard if needed to select USB in the computer's boot menu. The boot-menu key depends on the model; verify it rather than assuming one universal key. Boot the Reefy USB without selecting an internal-drive installation or formatting option. Do not silently disable firmware security protections.
@@ -60,6 +77,8 @@ Once the user is ready to boot, use the host's supported event continuation for 
 After registration, read authoritative ownership/state and follow the existing adoption/app startup workflow. For every new-device adoption, including voice-only setup and ordinary "adopt my device" requests, inspect storage without waiting for the user to mention it. Recommend the reported internal SSD/NVMe for app data, keeping the USB as boot media. Pause before adoption for one explicit exact-disk erase-or-preserve decision; explain that erasure removes all files, partitions and any operating system. In voice, speak the disk target and consequence. Do not silently fall back to USB because the user did not request SSD storage. An explicit preservation request can proceed without asking again. If multiple internal disks are reported, resolve the exact target; never interpret "all available storage" as permission to erase all disks. Read the account-owned cached storage inventory, show the disk name, model and capacity, and ask before erasing all contents of that selected internal disk. After the user explicitly chooses preservation, omit formatting and send `preserve_internal_storage:true`; never infer this choice from silence. A "Storage choice required" tool refusal has not started adoption and requires the erase-or-preserve question. Storage selection follows the existing web UI; no new firmware capability or reflash is required. Inventory age is not an upgrade requirement. Disk serials and WWNs remain internal; use the reported disk name, model and capacity for confirmation. Uncertain disk selection or missing confirmation never authorizes erasure. Reuse the setup goal and naming choices; do not require the user to ask again for adoption, monitoring or the originally requested app. Follow device-reported readiness, then show the app launch control. Browser/account sign-in may still be required when opening an app.
 
 ## Source and verification notes
+
+The local Wi-Fi flow is documented in the Reefy firmware repository, `docs/wifi-bootstrap.md`, and implemented by `reefy/wifi_bootstrap.py`. Dashboard controls are implemented in the service dashboard's WiFi settings. This guidance adds no Wi-Fi MCP tool, scope or firmware change.
 
 Product identities/configurations were checked against these listings; prices are the team's indicative figures:
 

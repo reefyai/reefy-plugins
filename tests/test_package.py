@@ -42,7 +42,7 @@ def test_update_preserves_registered_identity_assets_and_mapping(tmp_path):
         z.writestr('.app.json',json.dumps(mapping))
         z.writestr('assets/icon.svg','<svg/>')
         z.writestr('skills/existing/SKILL.md','Existing workflow')
-    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1116.0'}
+    assert build_update(base,out,'reefy.dev','synthetic-app')=={'name':'synthetic-reefy','version':'2026.1117.0'}
     with zipfile.ZipFile(out) as z:
         assert json.loads(z.read('.app.json'))==mapping
         assert z.read('assets/icon.svg')==b'<svg/>'
@@ -274,3 +274,20 @@ def test_minimal_discovery_keeps_app_opening_and_exact_disk_consent(domain):
     assert 'render_app_launcher(instance_uuid)' in skill
     assert 'get_operation.app_url' in skill
     assert 'show the authoritative returned `app_url` as one **Open app** Markdown link' in skill
+
+
+@pytest.mark.parametrize('domain', ['reefy.dev', 'reefy.ai'])
+def test_wifi_onboarding_is_local_and_does_not_collect_chat_credentials(domain):
+    package = render_package(domain)
+    skill = package['skills/reefy-setup/SKILL.md'].decode()
+    guide = package['skills/reefy-setup/references/new-device.md'].decode()
+    assert 'Wi-Fi or internet connection questions' in skill
+    assert 'Reefy-Setup-XXXX' in guide
+    assert 'http://192.168.73.1' in guide
+    assert 'password on the local setup page, never in chat' in guide
+    assert 'Ethernet is optional' in guide
+    assert 'WPA/WPA2-Personal' in guide
+    assert 'Settings > WiFi' in guide
+    assert 'network setup does not adopt the device or erase storage' in guide
+    assert 'do not invent a Wi-Fi tool' in skill
+    assert f'https://{domain}/dashboard' in guide
